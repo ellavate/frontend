@@ -9,6 +9,8 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
+// import createAuth0Client from '@auth0/auth0-spa-js';
+import Auth0Lock from "auth0-lock";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,6 +29,20 @@ const useStyles = makeStyles(theme => ({
     width: 250
   }
 }));
+
+let lock = new Auth0Lock(
+  process.env.REACT_APP_AUTH_CLIENT_ID,
+  process.env.REACT_APP_AUTH_DOMAIN,
+  {
+    auth: {
+      redirectUrl: "http://localhost:3000/home",
+      responseType: "code",
+      params: {
+        scope: "openid email" // Learn about scopes: https://auth0.com/docs/scopes
+      }
+    }
+  }
+);
 
 export default () => {
   const classes = useStyles();
@@ -72,7 +88,9 @@ export default () => {
           <Typography variant="h3" className={classes.title}>
             Ellavate Art
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" onClick={lock.show}>
+            Login
+          </Button>
           <Button color="inherit">Sign Up</Button>
         </Toolbar>
       </AppBar>
