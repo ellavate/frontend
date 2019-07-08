@@ -10,7 +10,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 // import createAuth0Client from '@auth0/auth0-spa-js';
-import Auth0Lock from "auth0-lock";
+// import Auth0Lock from "auth0-lock";
+import Login from "./Login";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,25 +31,22 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-let lock = new Auth0Lock(
-  process.env.REACT_APP_AUTH_CLIENT_ID,
-  process.env.REACT_APP_AUTH_DOMAIN,
-  {
-    auth: {
-      redirectUrl: "http://localhost:3000/home",
-      responseType: "code",
-      params: {
-        scope: "openid email" // Learn about scopes: https://auth0.com/docs/scopes
-      }
-    }
-  }
-);
-
-export default () => {
+export default props => {
   const classes = useStyles();
   const [state, setState] = React.useState({
     left: false
   });
+  const [modalState, setModalState] = React.useState({
+    open: false,
+    type: ""
+  });
+
+  const toggleModal = (open, type = "") => {
+    setModalState({
+      open: open,
+      type: type
+    });
+  };
 
   const toggleDrawer = (side, open) => event => {
     if (
@@ -74,6 +72,13 @@ export default () => {
 
   return (
     <div className={classes.root}>
+      {modalState.open ? (
+        <Login
+          type={modalState.type}
+          toggleModal={toggleModal}
+          history={props.history}
+        />
+      ) : null}
       <AppBar className={classes.title} position="static">
         <Toolbar>
           <IconButton
@@ -88,10 +93,12 @@ export default () => {
           <Typography variant="h3" className={classes.title}>
             Ellavate Art
           </Typography>
-          <Button color="inherit" onClick={lock.show}>
+          <Button color="inherit" onClick={() => toggleModal(true, "login")}>
             Login
           </Button>
-          <Button color="inherit">Sign Up</Button>
+          <Button color="inherit" onClick={() => toggleModal(true, "signup")}>
+            Sign Up
+          </Button>
         </Toolbar>
       </AppBar>
       <Divider variant="middle" />

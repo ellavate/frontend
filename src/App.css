@@ -32,3 +32,26 @@ img {
   background-color: white;
   border-radius: 10px;
 }
+
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  position: fixed;
+  background-color: rgba(34, 34, 34, 0.7);
+  z-index: 1001;
+}
+
+.login-form {
+  width: 50%;
+  height: 50%;
+  background-color: rgba(255, 255, 255, 1);
+  color: black;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 1002;
+}
